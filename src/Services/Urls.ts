@@ -1,8 +1,7 @@
-const BACKEND_URL = "http://localhost:3000/";
+const BACKEND_URL = "http://localhost:3000/api/v1/";
 
 const URLS = {
-  codes: BACKEND_URL + "codes/",
-  callback: BACKEND_URL + "callback/",
+  trackingRequest: BACKEND_URL + "tracking-request/",
 };
 
 export default URLS;
