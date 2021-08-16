@@ -41,7 +41,7 @@ const Tracking: React.FC = () => {
     // send received data to backend
     await updateTrackingRequestWithUserData(trackingRequestId, formUserData);
     // redirect to redirectUrl
-    // window.location.href = trackingRequest.redirectUrl;
+    window.location.href = trackingRequest.redirectUrl;
   };
 
   useEffect(() => {

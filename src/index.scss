@@ -1,4 +1,6 @@
+// normalize.css
 @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css");
+// fonts
 @import url("https://fonts.googleapis.com/css2?family=Lato&family=Raleway&display=swap");
 
 :root {
@@ -17,12 +19,11 @@
 
 body {
   font-family: var(--font-main);
+  background-color: var(--color-details-lighter);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5 {
-  font-family: var(--font-title);
+.horizontal-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

@@ -19,3 +19,8 @@ export interface UserData {
   image?: Blob;
   audio?: Blob;
 }
+
+export interface SliderImage {
+  src: string;
+  alt: string;
+}

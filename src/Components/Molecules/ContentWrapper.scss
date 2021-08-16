@@ -1,0 +1,14 @@
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  width: 80%;
+  padding: 1.5rem;
+  background-color: var(--color-white);
+  border-radius: 25px;
+}
