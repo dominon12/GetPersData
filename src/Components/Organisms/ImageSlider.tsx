@@ -24,16 +24,15 @@ const ImageSlider: React.FC<Props> = ({ images }) => {
 
   return (
     <Carousel
-      swipeable={true}
-      draggable={true}
       responsive={sliderResponsiveOptions}
-      autoPlay={true}
-      keyBoardControl={true}
-      infinite={true}
       transitionDuration={100}
       autoPlaySpeed={5000}
       containerClass="image-slider"
       itemClass="image-slider__item"
+      swipeable
+      draggable
+      autoPlay
+      keyBoardControl
     >
       {images.length ? renderImages() : "No images were passed"}
     </Carousel>

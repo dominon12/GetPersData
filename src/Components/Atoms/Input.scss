@@ -22,11 +22,14 @@
 
     &:focus {
       outline: none;
-      border-bottom: 1px solid var(--color-details);
+      border-color: var(--color-details);
     }
-    &:valid {
+    &:not(:focus):not(:placeholder-shown):valid {
+      // apply styles when (!focused && valid)
+      border-color: vaR(--color-success);
     }
     &:invalid {
+      border-color: var(--color-danger);
     }
   }
 }
