@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import "./TrackingRequestForm.scss";
 import Button from "../Atoms/Button";
-import Checkbox from "../Atoms/Checkbox";
+import ToggleSwitch from "../Atoms/ToggleSwitch";
 import Input from "../Atoms/Input";
 import Subtitle from "../Atoms/Subtitle";
 import Title from "../Atoms/Title";
@@ -44,22 +44,22 @@ const TrackingRequestForm: React.FC = () => {
           type="url"
           required
         />
-        <Checkbox
+        <ToggleSwitch
           checked={hideAddress}
           handleChange={setHideAddress}
           label={t("form.fields.hideAddress")}
         />
-        <Checkbox
+        <ToggleSwitch
           checked={askGeolocation}
           handleChange={setAskGeolocation}
           label={t("form.fields.askGeolocation")}
         />
-        <Checkbox
+        <ToggleSwitch
           checked={askVideo}
           handleChange={setAskVideo}
           label={t("form.fields.askVideo")}
         />
-        <Checkbox
+        <ToggleSwitch
           checked={askAudio}
           handleChange={setAskAudio}
           label={t("form.fields.askAudio")}

@@ -7,11 +7,17 @@
   // fonts
   --font-title: "Raleway", sans-serif;
   --font-main: "Lato", sans-serif;
-  // colors
-  --color-white: rgb(255, 255, 255);
-  --color-black: rgb(10, 10, 32);
+  // unique palette
   --color-details: rgb(58, 82, 226);
   --color-details-lighter: rgb(175, 191, 235);
+  // indicators
+  --color-danger: red;
+  --color-warning: orange;
+  --color-info: blue;
+  --color-success: green;
+  // default colors
+  --color-white: rgb(255, 255, 255);
+  --color-black: rgb(10, 10, 32);
   --color-gray: rgb(83, 83, 93);
   --color-gray-lighter: rgb(151, 148, 163);
   --color-light-gray: rgb(235, 235, 242);
