@@ -3,23 +3,83 @@ import { useTranslation } from "react-i18next";
 
 import "./TrackingRequestForm.scss";
 import Button from "../Atoms/Button";
-import ToggleSwitch from "../Atoms/ToggleSwitch";
-import Input from "../Atoms/Input";
 import Subtitle from "../Atoms/Subtitle";
 import Title from "../Atoms/Title";
 import SocialLinks from "../Molecules/SocialLinks";
+import Form from "../Molecules/Form";
+import { FormField } from "../../Types/Types";
+import { checkFormValid } from "../../Services/FormService";
 
 const TrackingRequestForm: React.FC = () => {
   const { t } = useTranslation();
 
-  const [email, setEmail] = useState("");
-  const [redirectUrl, setRedirectUrl] = useState("");
-  const [hideAddress, setHideAddress] = useState(true);
-  const [askGeolocation, setAskGeolocation] = useState(false);
-  const [askVideo, setAskVideo] = useState(false);
-  const [askAudio, setAskAudio] = useState(false);
+  const formFields: FormField[] = [
+    {
+      id: 1,
+      type: 1,
+      name: "email",
+      placeholder: t("form.fields.your_email"),
+      label: t("form.fields.email"),
+      htmlType: "email",
+      required: true,
+      regexp:
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      defaultValue: "",
+    },
+    {
+      id: 2,
+      type: 1,
+      name: "redirectUrl",
+      placeholder: t("form.fields.redirectUrlExplicit"),
+      label: t("form.fields.redirectUrl"),
+      htmlType: "url",
+      required: true,
+      regexp:
+        /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
+      defaultValue: "",
+    },
+    {
+      id: 3,
+      type: 2,
+      name: "hideUrl",
+      label: t("form.fields.hideUrl"),
+      defaultValue: true,
+      required: false,
+    },
+    {
+      id: 4,
+      type: 2,
+      name: "askGeolocation",
+      label: t("form.fields.askGeolocation"),
+      defaultValue: false,
+      required: false,
+    },
+    {
+      id: 5,
+      type: 2,
+      name: "askVideo",
+      label: t("form.fields.askVideo"),
+      defaultValue: false,
+      required: false,
+    },
+    {
+      id: 6,
+      type: 2,
+      name: "askAudio",
+      label: t("form.fields.askAudio"),
+      defaultValue: false,
+      required: false,
+    },
+  ];
 
-  const handleFormSubmit = () => {};
+  const [formState, setFormState] = useState({});
+
+  const handleFormSubmit = () => {
+    const formValid = checkFormValid(formFields, formState);
+    if (formValid) {
+      // TODO: call backend, get generated TrackingRequest's code, show it.
+    }
+  };
 
   return (
     <div className="tracking-request-form">
@@ -27,44 +87,12 @@ const TrackingRequestForm: React.FC = () => {
       <Subtitle className="tracking-request-form__subtitle">
         {t("form.options")}
       </Subtitle>
-      <div className="tracking-request-form__form-fields">
-        <Input
-          value={email}
-          handleChange={setEmail}
-          placeholder={t("form.fields.your_email")}
-          label={t("form.fields.email")}
-          type="email"
-          required
-        />
-        <Input
-          value={redirectUrl}
-          handleChange={setRedirectUrl}
-          placeholder={t("form.fields.redirectUrlExplicit")}
-          label={t("form.fields.redirectUrl")}
-          type="url"
-          required
-        />
-        <ToggleSwitch
-          checked={hideAddress}
-          handleChange={setHideAddress}
-          label={t("form.fields.hideAddress")}
-        />
-        <ToggleSwitch
-          checked={askGeolocation}
-          handleChange={setAskGeolocation}
-          label={t("form.fields.askGeolocation")}
-        />
-        <ToggleSwitch
-          checked={askVideo}
-          handleChange={setAskVideo}
-          label={t("form.fields.askVideo")}
-        />
-        <ToggleSwitch
-          checked={askAudio}
-          handleChange={setAskAudio}
-          label={t("form.fields.askAudio")}
-        />
-      </div>
+      <Form
+        fields={formFields}
+        formState={formState}
+        setFormState={setFormState}
+        className="tracking-request-form__form"
+      />
       <div className="horizontal-container">
         <Button buttonStyle="primary" onClick={handleFormSubmit}>
           {t("form.begin")}

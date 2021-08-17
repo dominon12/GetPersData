@@ -19,17 +19,27 @@
     font-size: 1rem;
     border: none;
     border-bottom: 1px solid var(--color-light-gray);
+    transition: 0.5s;
 
     &:focus {
       outline: none;
       border-color: var(--color-details);
     }
+
     &:not(:focus):not(:placeholder-shown):valid {
       // apply styles when (!focused && valid)
       border-color: vaR(--color-success);
     }
-    &:invalid {
+
+    &:invalid,
+    &.invalid {
       border-color: var(--color-danger);
     }
+  }
+
+  &__error {
+    padding-top: 0.2rem;
+    font-size: 0.8rem;
+    color: var(--color-danger);
   }
 }

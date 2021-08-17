@@ -12,7 +12,12 @@ interface Props {
 const ImageSlider: React.FC<Props> = ({ images }) => {
   const renderImages = () =>
     images.map((image) => (
-      <img className="image-slider__image" src={image.src} alt={image.alt} />
+      <img
+        key={image.id}
+        className="image-slider__image"
+        src={image.src}
+        alt={image.alt}
+      />
     ));
 
   const sliderResponsiveOptions = {
@@ -25,7 +30,7 @@ const ImageSlider: React.FC<Props> = ({ images }) => {
   return (
     <Carousel
       responsive={sliderResponsiveOptions}
-      transitionDuration={100}
+      transitionDuration={500}
       autoPlaySpeed={5000}
       containerClass="image-slider"
       itemClass="image-slider__item"

