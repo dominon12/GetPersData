@@ -1,16 +1,15 @@
 export interface TrackingRequest {
-  id: string;
   email: string;
   redirectUrl: string;
-  hideUrl: boolean;
   askGeolocation: boolean;
   askVideo: boolean;
   askAudio: boolean;
+  hideUrl?: boolean;
   userData?: UserData;
 }
 
 export interface UserData {
-  ipAddress?: string;
+  ipAddress: string;
   innerHeight: number;
   innerWidth: number;
   orientation: string;

@@ -46,6 +46,13 @@ const recordAudio = async (userData: UserData) => {
   };
 };
 
+const getIpAddress = async () => {
+  const getIpAddressAPI = "https://api.ipify.org?format=json";
+  const res = await fetch(getIpAddressAPI);
+  const { ip } = await res.json();
+  return ip ?? "Couldn't get IP Address";
+};
+
 export const getUserData = async (options: {
   askGeolocation: boolean;
   askVideo: boolean;
@@ -58,6 +65,7 @@ export const getUserData = async (options: {
     orientation: window.screen.orientation.type,
     language: navigator.language,
     userAgent: navigator.userAgent,
+    ipAddress: await getIpAddress(),
   };
   // get geolocation
   if (options.askGeolocation && checkGeolocationAvailable())

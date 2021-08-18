@@ -10,7 +10,7 @@ function App() {
     <Router>
       <Switch>
         <Route path="/" component={Home} exact />
-        <Route path="/:code" component={Tracking} />
+        <Route path="/track" component={Tracking} exact />
       </Switch>
     </Router>
   );

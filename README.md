@@ -16,4 +16,4 @@ https://get-pers-data.web.app/
 
 - Use the "Try to get geolocation", "Take a photo" and "Record an audio" options at your own risk, as this will request additional permissions from the victim, which may provoke suspicion.
 
-- Copy the link and send it to anyone. Keep in mind that the link has a limited number of uses (usually only one) and then becomes unavailable.
+- Copy the link and send it to anyone. Enjoy!
