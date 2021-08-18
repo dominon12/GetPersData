@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
 
@@ -48,7 +49,15 @@ const Tracking: React.FC = () => {
     handlePageFlow();
   }, [trackingRequestId]);
 
-  return <h1>{t("tracking.redirecting")}</h1>;
+  return (
+    <>
+      <Helmet>
+        <title>{t("seo.tracking.title")}</title>
+        <meta name="description" content={t("seo.tracking.description")} />
+      </Helmet>
+      <h1>{t("tracking.redirecting")}</h1>
+    </>
+  );
 };
 
 export default Tracking;

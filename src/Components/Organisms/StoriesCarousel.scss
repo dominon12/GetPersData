@@ -1,11 +1,10 @@
 .stories-carousel {
   flex: 1;
   display: flex;
-  border-radius: 25px;
   cursor: grab;
-
-  &__item {
-  }
+  border-radius: 25px;
+  overflow: hidden;
+  z-index: 1;
 
   &.show-before-tablet {
     @media (max-width: 980px) {
@@ -19,6 +18,9 @@
     @media (max-width: 980px) {
       display: flex;
     }
+  }
+
+  &__item {
   }
 }
 
