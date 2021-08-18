@@ -21,10 +21,10 @@ export interface UserData {
   audio?: Blob;
 }
 
-export interface SliderImage {
+export interface Story {
   id: number;
-  src: string;
-  alt: string;
+  backgroundSrc: string;
+  text: string;
 }
 
 export interface FormField {

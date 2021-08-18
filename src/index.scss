@@ -1,7 +1,7 @@
 // normalize.css
 @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css");
 // fonts
-@import url("https://fonts.googleapis.com/css2?family=Lato&family=Raleway&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato&family=Raleway:wght@400;800&display=swap");
 
 :root {
   // fonts
@@ -25,7 +25,7 @@
 
 body {
   font-family: var(--font-main);
-  background-color: var(--color-details-lighter);
+  background: url("/Assets/Stories/Background1.jpeg") center / cover no-repeat;
 }
 
 .horizontal-container {
