@@ -1,9 +1,24 @@
 .stories-carousel {
-  width: 55%;
+  flex: 1;
   display: flex;
   border-radius: 25px;
+  cursor: grab;
 
   &__item {
+  }
+
+  &.show-before-tablet {
+    @media (max-width: 980px) {
+      display: none;
+    }
+  }
+
+  &.show-after-laptop {
+    display: none;
+
+    @media (max-width: 980px) {
+      display: flex;
+    }
   }
 }
 

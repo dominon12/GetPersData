@@ -8,9 +8,10 @@ import Story from "../Molecules/Story";
 
 interface Props {
   stories: IStory[];
+  containerClass?: string;
 }
 
-const StoriesCarousel: React.FC<Props> = ({ stories }) => {
+const StoriesCarousel: React.FC<Props> = ({ stories, containerClass }) => {
   const sliderResponsiveOptions = {
     default: {
       breakpoint: { max: Infinity, min: -Infinity },
@@ -26,12 +27,13 @@ const StoriesCarousel: React.FC<Props> = ({ stories }) => {
       responsive={sliderResponsiveOptions}
       transitionDuration={500}
       autoPlaySpeed={10000}
-      containerClass="stories-carousel"
+      containerClass={`stories-carousel ${containerClass}`}
       itemClass="stories-carousel__item"
       swipeable
       draggable
       autoPlay
       keyBoardControl
+      arrows={false}
     >
       {stories.length ? renderStories() : "No stories were passed"}
     </Carousel>

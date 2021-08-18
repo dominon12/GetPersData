@@ -9,6 +9,8 @@ import SocialLinks from "../Molecules/SocialLinks";
 import Form from "../Molecules/Form";
 import { FormField } from "../../Types/Types";
 import { checkFormValid } from "../../Services/FormService";
+import StoriesCarousel from "./StoriesCarousel";
+import { getStories } from "../../Services/StoriesService";
 
 const TrackingRequestForm: React.FC = () => {
   const { t } = useTranslation();
@@ -84,6 +86,10 @@ const TrackingRequestForm: React.FC = () => {
   return (
     <div className="tracking-request-form">
       <Title className="tracking-request-form__title">{t("form.title")}</Title>
+      <StoriesCarousel
+        stories={getStories(t)}
+        containerClass="show-after-laptop"
+      />
       <Subtitle className="tracking-request-form__subtitle">
         {t("form.options")}
       </Subtitle>
@@ -93,7 +99,7 @@ const TrackingRequestForm: React.FC = () => {
         setFormState={setFormState}
         className="tracking-request-form__form"
       />
-      <div className="horizontal-container">
+      <div className="tracking-request-form__button-container">
         <Button buttonStyle="primary" onClick={handleFormSubmit}>
           {t("form.begin")}
         </Button>

@@ -26,10 +26,10 @@
 body {
   font-family: var(--font-main);
   background: url("/Assets/Stories/Background1.jpeg") center / cover no-repeat;
+
+  @media (max-width: 355px) {
+    background: var(--color-white);
+  }
 }
 
-.horizontal-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+
