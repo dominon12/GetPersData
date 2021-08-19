@@ -8,7 +8,6 @@ interface Props {
 }
 
 const Story: React.FC<Props> = ({ story }) => {
-  console.log({ bg: story.backgroundSrc });
   return (
     <div
       className="story"

@@ -24,6 +24,7 @@
 }
 
 body {
+  min-height: 100vh;
   font-family: var(--font-main);
   background: url("/Assets/Stories/Background1.jpeg") center / cover no-repeat;
 
@@ -31,5 +32,3 @@ body {
     background: var(--color-white);
   }
 }
-
-

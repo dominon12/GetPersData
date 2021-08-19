@@ -3,7 +3,7 @@ import React from "react";
 import "./Button.scss";
 
 interface Props {
-  buttonStyle: string;
+  buttonStyle: "primary";
   onClick: () => void;
 }
 

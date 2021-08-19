@@ -6,6 +6,8 @@
     "title": "Get Personal Data Right Now",
     "options": "Options",
     "begin": "Begin",
+    "copyLink": "Copy link",
+    "startAgain": "Regenerate",
     "fields": {
       "email": "Email",
       "your_email": "Your email",

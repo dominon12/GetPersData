@@ -7,13 +7,17 @@ import Subtitle from "../Atoms/Subtitle";
 import Title from "../Atoms/Title";
 import SocialLinks from "../Molecules/SocialLinks";
 import Form from "../Molecules/Form";
-import { FormField } from "../../Types/Types";
+import { FormField, TrackingRequest } from "../../Types/Types";
 import { checkFormValid } from "../../Services/FormService";
 import StoriesCarousel from "./StoriesCarousel";
 import { getStories } from "../../Services/StoriesService";
+import Loading from "../Molecules/Loading";
+import CopyLink from "../Molecules/CopyLink";
 
 const TrackingRequestForm: React.FC = () => {
   const { t } = useTranslation();
+
+  const DEFAULT_DELAY = 1500;
 
   const formFields: FormField[] = [
     {
@@ -74,13 +78,37 @@ const TrackingRequestForm: React.FC = () => {
     },
   ];
 
-  const [formState, setFormState] = useState({});
+  const [formState, setFormState] = useState<any>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [resultLink, setResultLink] = useState<string | null>(null);
 
-  const handleFormSubmit = () => {
+  const getTrackingLink = () => {
+    const getParams = new URLSearchParams(formState).toString();
+    const trackingLink = `${
+      window.location.href
+    }tracking?${getParams.toString()}`;
+    
+    if (formState.hideUrl) { // if needs to hide url
+      // TODO: hide url here
+    }
+    return trackingLink;
+  };
+
+  const handleGenerateTrackingLink = () => {
     const formValid = checkFormValid(formFields, formState);
     if (formValid) {
-      // TODO: call backend, get generated TrackingRequest's code, show it.
+      setIsLoading(true);
+      const link = getTrackingLink();
+      setFormState({});
+      setResultLink(link);
+      setTimeout(() => setIsLoading(false), DEFAULT_DELAY);
     }
+  };
+
+  const handleStartAgain = () => {
+    setIsLoading(true);
+    setResultLink(null);
+    setTimeout(() => setIsLoading(false), DEFAULT_DELAY);
   };
 
   return (
@@ -90,21 +118,30 @@ const TrackingRequestForm: React.FC = () => {
         stories={getStories(t)}
         containerClass="show-after-laptop"
       />
-      <Subtitle className="tracking-request-form__subtitle">
-        {t("form.options")}
-      </Subtitle>
-      <Form
-        fields={formFields}
-        formState={formState}
-        setFormState={setFormState}
-        className="tracking-request-form__form"
-      />
-      <div className="tracking-request-form__button-container">
-        <Button buttonStyle="primary" onClick={handleFormSubmit}>
-          {t("form.begin")}
-        </Button>
-        <SocialLinks />
-      </div>
+
+      {isLoading ? (
+        <Loading /> // Link is generating
+      ) : resultLink ? (
+        <CopyLink link={resultLink} handleStartAgain={handleStartAgain} /> // Link has been generated
+      ) : (
+        <>
+          <Subtitle className="tracking-request-form__subtitle">
+            {t("form.options")}
+          </Subtitle>
+          <Form
+            fields={formFields}
+            formState={formState}
+            setFormState={setFormState}
+            className="tracking-request-form__form"
+          />
+          <div className="tracking-request-form__button-container">
+            <Button buttonStyle="primary" onClick={handleGenerateTrackingLink}>
+              {t("form.begin")}
+            </Button>
+            <SocialLinks />
+          </div>
+        </>
+      )}
     </div>
   );
 };
