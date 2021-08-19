@@ -26,3 +26,6 @@ yarn-error.log*
 .firebaserc
 firebase.json
 .firebase/
+
+# env variables
+src/Services/Credentials.ts

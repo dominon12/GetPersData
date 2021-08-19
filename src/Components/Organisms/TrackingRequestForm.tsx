@@ -7,12 +7,31 @@ import Subtitle from "../Atoms/Subtitle";
 import Title from "../Atoms/Title";
 import SocialLinks from "../Molecules/SocialLinks";
 import Form from "../Molecules/Form";
-import { FormField, TrackingRequest } from "../../Types/Types";
-import { checkFormValid } from "../../Services/FormService";
 import StoriesCarousel from "./StoriesCarousel";
-import { getStories } from "../../Services/StoriesService";
 import Loading from "../Molecules/Loading";
 import CopyLink from "../Molecules/CopyLink";
+import URLS from "../../Services/Urls";
+import { getStories } from "../../Services/StoriesService";
+import { FormField } from "../../Types/Types";
+import { checkFormValid } from "../../Services/FormService";
+import { LINK_SHORTENER_TOKEN } from "../../Services/Credentials";
+
+const shortifyUrl = async (url: string) => {
+  // won't work with localhost
+  const res = await fetch(URLS.linkShortenerAPI, {
+    method: "POST",
+    body: JSON.stringify({ long_url: url }),
+    headers: {
+      Authorization: `Bearer ${LINK_SHORTENER_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+  });
+  if (res.status === 200 || res.status === 201) {
+    const { link } = await res.json();
+    return link;
+  }
+  return url;
+};
 
 const TrackingRequestForm: React.FC = () => {
   const { t } = useTranslation();
@@ -82,23 +101,23 @@ const TrackingRequestForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [resultLink, setResultLink] = useState<string | null>(null);
 
-  const getTrackingLink = () => {
+  const getTrackingLink = async () => {
+    // get GET params
     const getParams = new URLSearchParams(formState).toString();
-    const trackingLink = `${
+    // construct a link
+    let trackingLink = `${
       window.location.href
     }tracking?${getParams.toString()}`;
-    
-    if (formState.hideUrl) { // if needs to hide url
-      // TODO: hide url here
-    }
+    // if needed, hide link using url shortener service
+    if (formState.hideUrl) trackingLink = await shortifyUrl(trackingLink);
     return trackingLink;
   };
 
-  const handleGenerateTrackingLink = () => {
+  const handleGenerateTrackingLink = async () => {
     const formValid = checkFormValid(formFields, formState);
     if (formValid) {
       setIsLoading(true);
-      const link = getTrackingLink();
+      const link = await getTrackingLink();
       setFormState({});
       setResultLink(link);
       setTimeout(() => setIsLoading(false), DEFAULT_DELAY);
