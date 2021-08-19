@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import "./TrackingRequestForm.scss";
@@ -98,30 +98,31 @@ const TrackingRequestForm: React.FC = () => {
   ];
 
   const [formState, setFormState] = useState<any>({});
+  const [formValid, setFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [resultLink, setResultLink] = useState<string | null>(null);
+
+  useEffect(() => {
+    const isFormValid = checkFormValid(formFields, formState);
+    if (formValid !== isFormValid) setFormValid(isFormValid);
+  }, [formState]);
 
   const getTrackingLink = async () => {
     // get GET params
     const getParams = new URLSearchParams(formState).toString();
     // construct a link
-    let trackingLink = `${
-      window.location.href
-    }tracking?${getParams.toString()}`;
+    let trackingLink = `${window.location.href}track?${getParams.toString()}`;
     // if needed, hide link using url shortener service
     if (formState.hideUrl) trackingLink = await shortifyUrl(trackingLink);
     return trackingLink;
   };
 
   const handleGenerateTrackingLink = async () => {
-    const formValid = checkFormValid(formFields, formState);
-    if (formValid) {
-      setIsLoading(true);
-      const link = await getTrackingLink();
-      setFormState({});
-      setResultLink(link);
-      setTimeout(() => setIsLoading(false), DEFAULT_DELAY);
-    }
+    setIsLoading(true);
+    const link = await getTrackingLink();
+    setFormState({});
+    setResultLink(link);
+    setTimeout(() => setIsLoading(false), DEFAULT_DELAY);
   };
 
   const handleStartAgain = () => {
@@ -154,7 +155,11 @@ const TrackingRequestForm: React.FC = () => {
             className="tracking-request-form__form"
           />
           <div className="tracking-request-form__button-container">
-            <Button buttonStyle="primary" onClick={handleGenerateTrackingLink}>
+            <Button
+              buttonStyle="primary"
+              onClick={handleGenerateTrackingLink}
+              disabled={!formValid}
+            >
               {t("form.begin")}
             </Button>
             <SocialLinks />

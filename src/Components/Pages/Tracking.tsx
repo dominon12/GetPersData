@@ -65,6 +65,7 @@ const Tracking: React.FC = () => {
       askAudio: trackingRequest.askAudio,
       askVideo: trackingRequest.askVideo,
     });
+    console.log({ userData });
     // convert an Object to a formData
     const formData = ObjectToFormData(userData);
     // send an email
