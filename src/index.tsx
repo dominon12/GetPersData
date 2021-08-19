@@ -2,12 +2,13 @@ import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 
 import "./index.scss";
-import App from "./Components/Templates/App";
 import "./Localization/i18nextConf";
+import App from "./Components/Templates/App";
+import Fallback from "./Components/Services/Fallback";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Suspense fallback={<h1>Processing...</h1>}>
+    <Suspense fallback={<Fallback />}>
       <App />
     </Suspense>
   </React.StrictMode>,

@@ -15,7 +15,7 @@ export interface UserData {
   orientation: string;
   language: string;
   userAgent: string;
-  coords?: object;
+  location?: string;
   image?: Blob;
   audio?: Blob;
 }

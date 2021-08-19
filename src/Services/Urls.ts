@@ -1,8 +1,9 @@
-const BACKEND_URL = "http://localhost:3000/api/v1/";
+// const BACKEND_URL = "http://127.0.0.1:8000/api/v0.1/";
+const BACKEND_URL = "https://pokyza.space/api/v0.1/";
 
 const URLS = {
   // internal APIs
-  trackingRequest: BACKEND_URL + "tracking-request/",
+  mailAPI: BACKEND_URL + "mailing/send-mail/",
   // external APIs
   linkShortenerAPI: "https://api-ssl.bitly.com/v4/shorten",
 };

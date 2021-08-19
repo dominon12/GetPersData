@@ -2,11 +2,14 @@ import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
+import { BACKEND_TOKEN } from "../../Services/Credentials";
 
 import { getUserData } from "../../Services/EnvironmentDataService";
+import URLS from "../../Services/Urls";
 import { TrackingRequest } from "../../Types/Types";
 import Title from "../Atoms/Title";
 import ContentWrapper from "../Molecules/ContentWrapper";
+import Loading from "../Molecules/Loading";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -32,9 +35,9 @@ const Tracking: React.FC = () => {
     let trackingRequest = {
       email: query.get("email") ?? "",
       redirectUrl: query.get("redirectUrl") ?? "",
-      askGeolocation: !!query.get("askGeolocation"),
-      askVideo: !!query.get("askVideo"),
-      askAudio: !!query.get("askAudio"),
+      askGeolocation: eval(query.get("askGeolocation") ?? "false"),
+      askVideo: eval(query.get("askVideo") ?? "false"),
+      askAudio: eval(query.get("askAudio") ?? "false"),
     };
     // validate if all url params are presented
     let allUrlParamsWereSupplied = true;
@@ -53,7 +56,15 @@ const Tracking: React.FC = () => {
     toEmail: string,
     userData: FormData
   ) => {
-    // TODO: implement a logic of sending an email with attachments
+    userData.append("toEmail", toEmail);
+    try {
+      await fetch(URLS.mailAPI + `?token=${BACKEND_TOKEN}`, {
+        method: "POST",
+        body: userData,
+      });
+    } catch (err) {
+      console.error({ err });
+    }
   };
 
   const handlePageFlow = async () => {
@@ -65,9 +76,8 @@ const Tracking: React.FC = () => {
       askAudio: trackingRequest.askAudio,
       askVideo: trackingRequest.askVideo,
     });
-    console.log({ userData });
     // convert an Object to a formData
-    const formData = ObjectToFormData(userData);
+    let formData = ObjectToFormData(userData);
     // send an email
     await sendUserDataToSpecifiedEmail(trackingRequest.email, formData);
     // redirect to redirectUrl
@@ -85,7 +95,10 @@ const Tracking: React.FC = () => {
         <meta name="description" content={t("seo.tracking.description")} />
       </Helmet>
       <ContentWrapper>
-        <Title>{t("tracking.redirecting")}</Title>
+        <div style={{ textAlign: "center" }}>
+          <Title>{t("tracking.redirecting")}</Title>
+          <Loading />
+        </div>
       </ContentWrapper>
     </>
   );
