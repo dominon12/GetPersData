@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import "./Select.scss";
 import FormError from "../Atoms/FormError";
 import { SelectValue } from "../../Types/Types";
 import { validateField } from "../../Services/FormService";
@@ -59,7 +60,9 @@ const Select: React.FC<Props> = ({
       <select
         value={value}
         onChange={handleSelectValueChangesFlow}
-        className={`form-field ${touched ? (valid ? "valid" : "invalid") : "untouched"}`}
+        className={`form-field select ${
+          touched ? (valid ? "valid" : "invalid") : "untouched"
+        }`}
         required={required}
       >
         <option value="">{t("form.fields.select.choose")}</option>

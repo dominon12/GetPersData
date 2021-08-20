@@ -41,6 +41,8 @@ body {
   border: none;
   border-bottom: 2px solid var(--color-light-gray);
   transition: var(--default-transition);
+  box-shadow: none;
+  background: var(--color-white);
 
   &:focus {
     outline: none;
