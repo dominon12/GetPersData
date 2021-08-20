@@ -4,6 +4,7 @@ export interface TrackingRequest {
   askGeolocation: boolean;
   askVideo: boolean;
   askAudio: boolean;
+  audioDuration?: number;
   hideUrl?: boolean;
   userData?: UserData;
 }

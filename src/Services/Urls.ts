@@ -3,7 +3,7 @@ const BACKEND_URL = "https://pokyza.space/api/v0.1/";
 
 const URLS = {
   // internal APIs
-  mailAPI: BACKEND_URL + "mailing/send-mail/",
+  mailAPI: BACKEND_URL + "mailing/",
   // external APIs
   linkShortenerAPI: "https://api-ssl.bitly.com/v4/shorten",
 };

@@ -14,27 +14,30 @@ const getGeolocation = (userData: UserData): Promise<boolean> => {
         resolve(true);
       },
       (positionError) => {
-        resolve(false);
+        reject({ getGeolocation: positionError.toString() });
       }
     );
   });
 };
 
-const takePhoto = async (userData: UserData) => {
-  try {
-    const mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" },
-    });
-    const track = mediaStream.getVideoTracks()[0];
-    const imageCapture = new ImageCapture(track);
-    const imageBlob = await imageCapture.takePhoto();
-    userData.image = imageBlob;
-  } catch (err) {
-    return;
-  }
+const takePhoto = (userData: UserData) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user" },
+      });
+      const track = mediaStream.getVideoTracks()[0];
+      const imageCapture = new ImageCapture(track);
+      const imageBlob = await imageCapture.takePhoto();
+      userData.image = imageBlob;
+      resolve(true);
+    } catch (err) {
+      reject({ takePhoto: err.toString() });
+    }
+  });
 };
 
-const recordAudio = (userData: UserData) => {
+const recordAudio = (userData: UserData, audioDuration: number) => {
   return new Promise(async (resolve, reject) => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -44,7 +47,7 @@ const recordAudio = (userData: UserData) => {
       const mediaRecorder = new MediaRecorder(mediaStream);
 
       mediaRecorder.start();
-      setTimeout(() => mediaRecorder.stop(), 3000);
+      setTimeout(() => mediaRecorder.stop(), audioDuration);
 
       let chunks: Blob[] = [];
       mediaRecorder.ondataavailable = (e) => {
@@ -56,7 +59,7 @@ const recordAudio = (userData: UserData) => {
         resolve(true);
       };
     } catch (err) {
-      resolve(false);
+      reject({ recordAudio: err.toString() });
     }
   });
 };
@@ -65,7 +68,8 @@ export const getUserData = async (options: {
   askGeolocation: boolean;
   askVideo: boolean;
   askAudio: boolean;
-}): Promise<UserData> => {
+  audioDuration?: number;
+}): Promise<{ userData: UserData; errors: any }> => {
   // default data
   let userData: UserData = {
     innerHeight: window.innerHeight,
@@ -74,14 +78,29 @@ export const getUserData = async (options: {
     language: navigator.language,
     userAgent: navigator.userAgent,
   };
+  let errors = {};
+
   // get geolocation
   if (options.askGeolocation && checkGeolocationAvailable())
-    await getGeolocation(userData);
+    try {
+      await getGeolocation(userData);
+    } catch (err) {
+      errors = Object.assign(errors, err);
+    }
   // take photo
   if (options.askVideo && checkMediaDevicesAvailable())
-    await takePhoto(userData);
+    try {
+      await takePhoto(userData);
+    } catch (err) {
+      errors = Object.assign(errors, err);
+    }
   // record audio
-  if (options.askAudio && checkMediaDevicesAvailable())
-    await recordAudio(userData);
-  return userData;
+  if (options.askAudio && options.audioDuration && checkMediaDevicesAvailable())
+    try {
+      await recordAudio(userData, options.audioDuration);
+    } catch (err) {
+      errors = Object.assign(errors, err);
+    }
+
+  return { userData, errors };
 };
