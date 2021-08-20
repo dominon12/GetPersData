@@ -26,7 +26,7 @@ const StoriesCarousel: React.FC<Props> = ({ stories, containerClass }) => {
     <Carousel
       responsive={sliderResponsiveOptions}
       transitionDuration={500}
-      autoPlaySpeed={10000}
+      autoPlaySpeed={5000}
       containerClass={`stories-carousel ${containerClass}`}
       itemClass="stories-carousel__item"
       swipeable

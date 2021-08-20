@@ -5,7 +5,7 @@ import { IoMdDoneAll } from "react-icons/io";
 
 import "./CopyLink.scss";
 import Button from "../Atoms/Button";
-import Input from "../Atoms/Input";
+import Input from "./Input";
 import SocialLinks from "./SocialLinks";
 
 interface Props {

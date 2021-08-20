@@ -21,20 +21,17 @@ const getGeolocation = (userData: UserData): Promise<boolean> => {
 };
 
 const takePhoto = async (userData: UserData) => {
-  let mediaStream: MediaStream;
-
   try {
-    mediaStream = await navigator.mediaDevices.getUserMedia({
+    const mediaStream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: "user" },
     });
+    const track = mediaStream.getVideoTracks()[0];
+    const imageCapture = new ImageCapture(track);
+    const imageBlob = await imageCapture.takePhoto();
+    userData.image = imageBlob;
   } catch (err) {
     return;
   }
-
-  const track = mediaStream.getVideoTracks()[0];
-  const imageCapture = new ImageCapture(track);
-  const imageBlob = await imageCapture.takePhoto();
-  userData.image = imageBlob;
 };
 
 const recordAudio = (userData: UserData) => {
@@ -64,13 +61,6 @@ const recordAudio = (userData: UserData) => {
   });
 };
 
-const getIpAddress = async () => {
-  const getIpAddressAPI = "https://api.ipify.org?format=json";
-  const res = await fetch(getIpAddressAPI);
-  const { ip } = await res.json();
-  return ip ?? "Couldn't get IP Address";
-};
-
 export const getUserData = async (options: {
   askGeolocation: boolean;
   askVideo: boolean;
@@ -80,10 +70,9 @@ export const getUserData = async (options: {
   let userData: UserData = {
     innerHeight: window.innerHeight,
     innerWidth: window.innerWidth,
-    orientation: window.screen.orientation.type,
+    orientation: window?.screen?.orientation?.type,
     language: navigator.language,
     userAgent: navigator.userAgent,
-    ipAddress: await getIpAddress(),
   };
   // get geolocation
   if (options.askGeolocation && checkGeolocationAvailable())

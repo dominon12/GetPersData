@@ -55,7 +55,7 @@ const TrackingRequestForm: React.FC = () => {
       id: 2,
       type: 1,
       name: "redirectUrl",
-      placeholder: t("form.fields.redirectUrlExplicit"),
+      placeholder: "https://...",
       label: t("form.fields.redirectUrl"),
       htmlType: "url",
       required: true,
@@ -94,6 +94,22 @@ const TrackingRequestForm: React.FC = () => {
       label: t("form.fields.askAudio"),
       defaultValue: false,
       required: false,
+      showIfValue: [
+        {
+          id: 7,
+          type: 3,
+          name: "audioDuration",
+          label: t("form.fields.audioDuration"),
+          defaultValue: 1500,
+          required: true,
+          selectValues: [
+            { id: 1, value: 1500, displayValue: "1.5 seconds" },
+            { id: 2, value: 3000, displayValue: "3 seconds" },
+            { id: 3, value: 5000, displayValue: "5 seconds" },
+            { id: 4, value: 10000, displayValue: "10 seconds" },
+          ],
+        },
+      ],
     },
   ];
 

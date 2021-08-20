@@ -9,7 +9,6 @@ export interface TrackingRequest {
 }
 
 export interface UserData {
-  ipAddress: string;
   innerHeight: number;
   innerWidth: number;
   orientation: string;
@@ -26,14 +25,22 @@ export interface Story {
   text: string;
 }
 
+export interface SelectValue {
+  id: number;
+  value: string | number;
+  displayValue: string;
+}
+
 export interface FormField {
   id: number;
-  type: number;
+  type: 1 | 2 | 3;
   name: string;
   label: string;
   defaultValue: any;
+  selectValues?: SelectValue[];
   placeholder?: string;
   htmlType?: string;
   required: boolean;
   regexp?: RegExp;
+  showIfValue?: FormField[];
 }

@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./Form.scss";
-import Input from "../Atoms/Input";
+import Input from "./Input";
 import ToggleSwitch from "../Atoms/ToggleSwitch";
 import { FormField } from "../../Types/Types";
+import Select from "./Select";
 
 interface Props {
   fields: FormField[];
@@ -26,21 +27,22 @@ const Form: React.FC<Props> = ({
     });
   };
 
-  const initializeFormFieldsWithDefaultValues = () => {
+  const initializeFormFieldsWithDefaultValues = (fields: FormField[]) =>
     fields.forEach((field) =>
       handleChangeFormState(field.defaultValue, field.name)
     );
-  };
 
   useEffect(() => {
-    initializeFormFieldsWithDefaultValues();
+    initializeFormFieldsWithDefaultValues(fields);
   }, []);
 
-  const renderFormFields = () =>
+  const renderFormFields = (fields: FormField[]): any =>
     fields.map((field, index) => {
+      let valueToReturn;
+
       switch (field.type) {
         case 1: // Input
-          return (
+          valueToReturn = (
             <Input
               key={field.id}
               stateKey={field.name}
@@ -53,8 +55,9 @@ const Form: React.FC<Props> = ({
               type={field.htmlType ?? "text"}
             />
           );
+          break;
         case 2: // ToggleSwitch
-          return (
+          valueToReturn = (
             <ToggleSwitch
               key={field.id}
               checked={formState[field.name]}
@@ -63,12 +66,39 @@ const Form: React.FC<Props> = ({
               label={field.label}
             />
           );
+          break;
+        case 3: // Select
+          valueToReturn = (
+            <Select
+              key={field.id}
+              label={field.label}
+              value={formState[field.name]}
+              stateKey={field.name}
+              handleChange={handleChangeFormState}
+              defaultValue={field.defaultValue}
+              values={field.selectValues ?? []}
+              required={field.required}
+            />
+          );
+          break;
         default:
-          return `Undefined field type at index #${index}`;
+          valueToReturn = `Undefined field type at index #${index}`;
+          break;
       }
+
+      return (
+        <>
+          {valueToReturn}
+          {formState[field.name] &&
+            field.showIfValue?.length &&
+            renderFormFields(field.showIfValue)}
+        </>
+      );
     });
 
-  return <form className={`form ${className}`}>{renderFormFields()}</form>;
+  return (
+    <form className={`form ${className}`}>{renderFormFields(fields)}</form>
+  );
 };
 
 export default Form;

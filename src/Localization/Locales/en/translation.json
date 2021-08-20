@@ -16,7 +16,11 @@
       "hideUrl": "Hide URL address",
       "askGeolocation": "Try to get geolocation",
       "askVideo": "Try to take a photo",
-      "askAudio": "Try to record an audio"
+      "askAudio": "Try to record an audio",
+      "audioDuration": "Audio duration",
+      "select": {
+        "choose": "Please choose an option"
+      }
     },
     "validator": {
       "emptyField": "This field is empty",

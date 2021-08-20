@@ -1,7 +1,10 @@
 import React, { useState, forwardRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import "./Input.scss";
+import FormError from "../Atoms/FormError";
+import FormFieldContainer from "../Atoms/FormFieldContainer";
+import FormLabel from "../Atoms/FormLabel";
+import { validateField } from "../../Services/FormService";
 
 interface Props {
   value: string;
@@ -34,41 +37,37 @@ const Input = forwardRef<HTMLInputElement, Props>(
 
     const [touched, setTouched] = useState(false);
     const [valid, setValid] = useState(true);
-    const [errMessage, setErrMessage] = useState(null);
-
-    const validate = (formValue: string) => {
-      if (!formValue) {
-        // no value
-        setValid(false);
-        setErrMessage(t("form.validator.emptyField"));
-      } else if (regexp && !regexp.test(formValue)) {
-        // doesn't match with RegExp pattern
-        setValid(false);
-        setErrMessage(t("form.validator.wrongPattern"));
-      } else if (!valid) {
-        // valid
-        if (!valid) setValid(true);
-        if (errMessage) setErrMessage(null);
-      }
-    };
+    const [errMessage, setErrMessage] = useState<string | null>(null);
 
     const handleInputValueChangesFlow = (
       e: React.ChangeEvent<HTMLInputElement>
     ) => {
-      if (!touched) setTouched(true);
+      let instantTouched = touched; // use a variable because React updates state asynchronously
+      if (!touched) {
+        setTouched(true);
+        instantTouched = true;
+      }
       handleChange && stateKey && handleChange(e.target.value, stateKey);
-      if (touched) validate(e.target.value);
+      instantTouched &&
+        validateField(
+          e.target.value,
+          valid,
+          errMessage,
+          setValid,
+          setErrMessage,
+          t,
+          { validateEmptyField: true, validateRegExp: true, regexp }
+        );
     };
 
     return (
-      <div className="input-element">
-        {label && (
-          <label className={`input-element__label ${required && "required"}`}>
-            {label}
-          </label>
-        )}
+      <FormFieldContainer>
+        {label && <FormLabel required={required}>{label}</FormLabel>}
+
         <input
-          className={`input-element__input ${!valid && "invalid"}`}
+          className={`form-field ${
+            touched ? (valid ? "valid" : "invalid") : "untouched"
+          }`}
           value={value}
           type={type ?? "text"}
           onChange={handleInputValueChangesFlow}
@@ -76,10 +75,9 @@ const Input = forwardRef<HTMLInputElement, Props>(
           disabled={disabled}
           ref={ref}
         />
-        {touched && !valid && errMessage && (
-          <span className="input-element__error">{errMessage}</span>
-        )}
-      </div>
+
+        {touched && !valid && errMessage && <FormError>{errMessage}</FormError>}
+      </FormFieldContainer>
     );
   }
 );
